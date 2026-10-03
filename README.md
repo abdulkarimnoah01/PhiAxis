@@ -77,7 +77,7 @@ please run the tests first.
 
 ## License and credits
 
-PhiAxis is released under the [MIT License](LICENSE). Houdini is a trademark of Side Effects Software Inc.; PhiAxis is not affiliated
+PhiAxis is copyright © 2026 AbdulKarim Noah, released under the [MIT License](LICENSE). Houdini is a trademark of Side Effects Software Inc.; PhiAxis is not affiliated
 with or endorsed by SideFX.
 
 Reference frames in the screenshots belong to their owners and are shown only to illustrate how the
