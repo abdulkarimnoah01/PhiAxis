@@ -1,6 +1,7 @@
 """Qt renderer, using SideFX's documented viewer window integration."""
 import hou
 from hutil.PySide import QtCore, QtGui
+from . import glow
 from .guides import guide_layers
 from .settings import style_for
 
@@ -60,12 +61,42 @@ class CompositionOverlay(hou.qt.ViewerOverlay):
 
     def _pen(self, key):
         color, opacity, thickness, line_style = style_for(self._settings, key)
-        qcolor = QtGui.QColor(*color)
+        glowing = self._settings.glow
+        qcolor = QtGui.QColor(*(glow.lighten(color) if glowing else color))
         qcolor.setAlphaF(opacity)
         pen = QtGui.QPen(qcolor)
-        pen.setWidthF(thickness)
+        pen.setWidthF(glow.core_width(thickness) if glowing else thickness)
         pen.setStyle(PEN_STYLES[line_style])
         return pen
+
+    def _halo_pens(self, key):
+        """Faint, wide strokes drawn first and added to the picture; none without glow."""
+        if not self._settings.glow:
+            return []
+        color, opacity, thickness, line_style = style_for(self._settings, key)
+        pens = []
+        for rgb, alpha, width in glow.halo_layers(color, opacity, thickness,
+                                                  self._settings.glow_amount):
+            qcolor = QtGui.QColor(*rgb)
+            qcolor.setAlpha(alpha)
+            pen = QtGui.QPen(qcolor)
+            pen.setWidthF(width)
+            pen.setStyle(PEN_STYLES[line_style])
+            pen.setCapStyle(QtCore.Qt.RoundCap)
+            pen.setJoinStyle(QtCore.Qt.RoundJoin)
+            pens.append(pen)
+        return pens
+
+    @staticmethod
+    def _draw(painter, geometry):
+        for line in geometry.lines:
+            painter.drawLine(QtCore.QLineF(*line))
+        for polyline in geometry.polylines:
+            painter.drawPolyline(QtGui.QPolygonF(
+                [QtCore.QPointF(x, y) for x, y in polyline]))
+        for ellipse in geometry.ellipses:
+            painter.drawEllipse(QtCore.QRectF(
+                ellipse.x, ellipse.y, ellipse.width, ellipse.height))
 
     def paintEvent(self, event):
         if self._closed or self._frame is None:
@@ -73,7 +104,7 @@ class CompositionOverlay(hou.qt.ViewerOverlay):
         painter = QtGui.QPainter(self)
         try:
             painter.setRenderHint(QtGui.QPainter.Antialiasing)
-            pens = {}
+            pens, halos = {}, {}
             for frame in self._frames:
                 painter.save()
                 rect = frame.viewport
@@ -81,15 +112,15 @@ class CompositionOverlay(hou.qt.ViewerOverlay):
                 for key, geometry in guide_layers(frame.gate, self._settings):
                     if key not in pens:
                         pens[key] = self._pen(key)
+                        halos[key] = self._halo_pens(key)
+                    if halos[key]:
+                        painter.setCompositionMode(QtGui.QPainter.CompositionMode_Plus)
+                        for halo_pen in halos[key]:
+                            painter.setPen(halo_pen)
+                            self._draw(painter, geometry)
+                        painter.setCompositionMode(QtGui.QPainter.CompositionMode_SourceOver)
                     painter.setPen(pens[key])
-                    for line in geometry.lines:
-                        painter.drawLine(QtCore.QLineF(*line))
-                    for polyline in geometry.polylines:
-                        painter.drawPolyline(QtGui.QPolygonF(
-                            [QtCore.QPointF(x, y) for x, y in polyline]))
-                    for ellipse in geometry.ellipses:
-                        painter.drawEllipse(QtCore.QRectF(
-                            ellipse.x, ellipse.y, ellipse.width, ellipse.height))
+                    self._draw(painter, geometry)
                 painter.restore()
         finally:
             painter.end()

@@ -13,7 +13,8 @@ GUIDE_KEYS = ("thirds", "golden", "diagonals", "crosshair", "safe_area",
 LINE_STYLES = ("solid", "dash", "dot")
 DYNAMIC_MODES = ("basic", "root2", "root3", "root4", "root5", "rootphi")
 # Fields that describe how guides look, as opposed to which guides are shown.
-STYLE_FIELDS = ("color", "opacity", "thickness", "line_style", "guide_styles")
+STYLE_FIELDS = ("color", "opacity", "thickness", "line_style", "guide_styles", "glow",
+                "glow_amount")
 
 
 def _check_color(color):
@@ -34,6 +35,9 @@ class Settings:
     line_style: str = "solid"
     # Per-guide overrides: ((key, (r, g, b), opacity, thickness, line_style), ...)
     guide_styles: tuple = ()
+    # A soft halo around every line (off by default); the amount runs from 0 to 2.
+    glow: bool = False
+    glow_amount: float = 1.0
     fit_camera: bool = True
     thirds: bool = True
     thirds_mode: str = "full"
@@ -97,8 +101,8 @@ class Settings:
     def __post_init__(self):
         if self.scope not in ("active", "all"):
             raise ValueError("Scope must be active or all")
-        for name in GUIDE_KEYS + ("fit_camera", "mirror", "flip_vertical", "pyramid_inverted",
-                                  "v_inverted"):
+        for name in GUIDE_KEYS + ("fit_camera", "mirror", "flip_vertical", "glow",
+                                  "pyramid_inverted", "v_inverted"):
             if type(getattr(self, name)) is not bool:
                 raise ValueError(name + " must be a boolean")
         for margin in (self.safe_x, self.safe_y):
@@ -130,6 +134,7 @@ class Settings:
         _check_fraction("balance_spacing", self.balance_spacing, 0.05, 0.95)
         _check_fraction("balance_y", self.balance_y, 0.05, 0.95)
         _check_color(self.color)
+        _check_fraction("glow_amount", self.glow_amount, 0, 2)
         if not isfinite(self.opacity) or not 0 <= self.opacity <= 1:
             raise ValueError("Opacity must be between 0 and 1")
         if not isfinite(self.thickness) or not 0 < self.thickness <= 20:

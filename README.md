@@ -34,6 +34,10 @@ frames are [below](#license-and-credits).*
   non-square pixels, quad views, floating viewers and Solaris cameras.
 - **Presets and styles.** Photography, Cinematography, Portrait and Landscape presets, your own saved
   presets, and a color, opacity, thickness and line style for every guide.
+- **Glow and color schemes.** An optional soft glow around every line, with an amount from 0 to 200%, and
+  four ready-made color schemes that give each family of guides its own hue (grids, golden-ratio guides,
+  perspective, shapes) instead of shades of one color. Both live in the Style tab; glow is off until you
+  turn it on.
 - **Never in the way.** Clicks, selection and camera moves pass straight through the overlay.
 - Works with **Houdini 20.5, 21.0 and 22.0** on Windows.
 

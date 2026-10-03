@@ -1,5 +1,5 @@
 """PhiAxis node-free composition guides. Importing has no UI side effects."""
-__version__ = "0.7.2"
+__version__ = "0.8.0"
 _SESSION_KEY = "_composition_guides_manager_v1"
 _SETTINGS_KEY = "_composition_guides_settings_v1"
 _UI_KEY = "_composition_guides_dialog_v1"
@@ -68,8 +68,8 @@ def reload_plugin():
     # The package itself first, so functions added in a newer version exist before the
     # submodules (which import names from it) are reloaded. State lives in hou.session.
     importlib.reload(sys.modules[__name__])
-    for name in ("guides", "settings", "presets", "updater", "update_ui", "adapter",
-                 "overlay", "manager", "ui"):
+    for name in ("guides", "settings", "glow", "schemes", "presets", "updater", "update_ui",
+                 "adapter", "overlay", "manager", "ui"):
         module = sys.modules.get(__name__ + "." + name)
         if module is not None:
             importlib.reload(module)

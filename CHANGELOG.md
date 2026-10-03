@@ -4,6 +4,19 @@ All notable changes to PhiAxis. Newest first. Version numbers follow
 `major.minor.patch`: patch for fixes, minor for new guides or features, major for
 changes that break saved settings.
 
+### 0.8.0 (2026-10-03)
+
+- **Glow.** The Style tab has a new "Glow around every line" checkbox and an "Amount of glow"
+  (0 to 200%). The overlay draws a few wide, faint strokes added to the picture and a lighter,
+  brighter core on top. Off by default, so nothing changes until you turn it on.
+- **Color schemes.** Style presets that give each family of guides its own hue instead of shades
+  of one color: *Cargo bay*, *Compound*, *Computer* and *Quota* (four hues each), plus single-color
+  *Amber phosphor* and *Green phosphor*. Pick one under "Color scheme" and press Apply. A scheme
+  sets colors only; every guide keeps its own opacity, thickness and line style, and which
+  guides are on does not change. "Single color (default)" removes all per-guide styles.
+- New settings `glow` and `glow_amount`; both are style fields, so guide presets do not
+  change them. Settings files from earlier versions load unchanged.
+
 ### 0.7.2 (2026-10-03)
 
 - New PhiAxis icon on the shelf: line art drawn for the dark Houdini interface (the source

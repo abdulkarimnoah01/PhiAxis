@@ -3,7 +3,7 @@ from dataclasses import replace
 import hou
 from hutil.PySide import QtCore, QtGui, QtWidgets
 from . import get_settings, set_settings, enable, disable, _current, settings_path, __version__
-from . import presets
+from . import presets, schemes
 from .settings import (Settings, GUIDE_KEYS, LINE_STYLES, style_for, with_guide_style,
                        load_presets, save_preset, delete_preset)
 
@@ -195,6 +195,27 @@ class SettingsDialog(QtWidgets.QDialog):
     def _style_tab(self):
         page = QtWidgets.QWidget()
         column = QtWidgets.QVBoxLayout(page)
+        look = QtWidgets.QGroupBox("Glow and color schemes")
+        form = QtWidgets.QFormLayout(look)
+        self.glow = self.check("Glow around every line")
+        self.glow_amount = self.spin(0, 200, 10, "%")
+        form.addRow(self.glow)
+        form.addRow("Amount of glow", self.glow_amount)
+        row = QtWidgets.QHBoxLayout()
+        self.scheme = QtWidgets.QComboBox()
+        self.scheme.addItem(schemes.DEFAULT_SCHEME)
+        for name in schemes.SCHEMES:
+            self.scheme.addItem(name)
+        self.scheme.setToolTip(
+            "Gives each family of guides its own color. Single color removes every "
+            "per-guide style, including opacity and thickness.")
+        apply_scheme = QtWidgets.QPushButton("Apply")
+        apply_scheme.clicked.connect(self.apply_scheme)
+        row.addWidget(self.scheme, 1)
+        row.addWidget(apply_scheme)
+        form.addRow("Color scheme", row)
+        column.addWidget(look)
+
         shared = QtWidgets.QGroupBox("All guides")
         form = QtWidgets.QFormLayout(shared)
         self.opacity = self.spin(0, 100, 5, "%")
@@ -272,6 +293,9 @@ class SettingsDialog(QtWidgets.QDialog):
                 getattr(self, name).setValue(getattr(settings, name) * 100)
             self.opacity.setValue(settings.opacity * 100)
             self.thickness.setValue(settings.thickness)
+            self.glow.setChecked(settings.glow)
+            self.glow_amount.setValue(settings.glow_amount * 100)
+            self.glow_amount.setEnabled(settings.glow)
             self.color.setStyleSheet("background-color: rgb(%d,%d,%d);" % settings.color)
             key = self.style_guide.currentData()
             custom = any(entry[0] == key for entry in settings.guide_styles)
@@ -302,7 +326,9 @@ class SettingsDialog(QtWidgets.QDialog):
             values[name] = getattr(self, name).value() / 100
         values.update(radial_count=self.radial_count.value(),
                       opacity=self.opacity.value() / 100,
-                      thickness=self.thickness.value())
+                      thickness=self.thickness.value(),
+                      glow=self.glow.isChecked(),
+                      glow_amount=self.glow_amount.value() / 100)
         set_settings(replace(get_settings(), **values))
         self.message.setText("Changes apply immediately. Save defaults to keep them "
                              "next session.")
@@ -319,6 +345,12 @@ class SettingsDialog(QtWidgets.QDialog):
         self.sync()
 
     # ----- actions ------------------------------------------------------
+    def apply_scheme(self):
+        name = self.scheme.currentText()
+        set_settings(schemes.apply_scheme(get_settings(), name))
+        self.message.setText("Applied color scheme “%s”." % name)
+        self.sync()
+
     def toggle_enabled(self, checked):
         if self._syncing:
             return
