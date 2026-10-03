@@ -11,14 +11,14 @@ PhiAxis is an overlay: it adds no nodes, changes nothing in your scene, and neve
 
 | | |
 | --- | --- |
-| ![The Electra rig posed over a film still, with the rule of thirds](docs/images/02_rig_on_film_still.jpg) | ![Centered frame within a frame](docs/images/03_centered_frame_within_a_frame.jpg) |
-| *A posed rig over a film still, rule of thirds* | *Centered frame within a frame* |
-| ![Central symmetry](docs/images/04_central_symmetry.jpg) | ![Centered composition](docs/images/05_centered_phone_booth.jpg) |
-| *Central symmetry* | *Centered composition* |
-| ![Leading lines](docs/images/06_leading_lines.jpg) | ![Rule of thirds](docs/images/07_rule_of_thirds.jpg) |
-| *Leading lines* | *Rule of thirds* |
-| ![Balance, symmetry and centered composition together](docs/images/08_balance_symmetry_centered.jpg) | ![PhiAxis over a Solaris camera view: golden spiral, rectangles and a frame](docs/images/09_solaris_camera_view.jpg) |
-| *Balance, symmetry and centered composition combined* | *Golden spiral over a Solaris camera view* |
+| ![The Electra rig posed over a film still, with the rule of thirds](docs/images/02_rig_on_film_still.jpg) | ![PhiAxis over a Solaris camera view: golden spiral, rectangles and a frame](docs/images/09_solaris_camera_view.jpg) |
+| *A posed rig over a film still, rule of thirds* | *Golden spiral over a Solaris camera view* |
+| ![Centered frame within a frame](docs/images/03_centered_frame_within_a_frame.jpg) | ![Central symmetry](docs/images/04_central_symmetry.jpg) |
+| *Centered frame within a frame* | *Central symmetry* |
+| ![Centered composition](docs/images/05_centered_phone_booth.jpg) | ![Leading lines](docs/images/06_leading_lines.jpg) |
+| *Centered composition* | *Leading lines* |
+| ![Rule of thirds](docs/images/07_rule_of_thirds.jpg) | ![Balance, symmetry and centered composition together](docs/images/08_balance_symmetry_centered.jpg) |
+| *Rule of thirds* | *Balance, symmetry and centered composition combined* |
 
 *Screenshots of PhiAxis running in Houdini, drawing its guides over reference frames. The guides illustrate how each one
 looks over an image and do not claim the filmmakers or game artists used that construction. Credits for the reference
