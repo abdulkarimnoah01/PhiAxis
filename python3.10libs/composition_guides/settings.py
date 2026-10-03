@@ -70,6 +70,7 @@ class Settings:
     scope: str = "active"
     orientation: int = 0
     mirror: bool = False
+    flip_vertical: bool = False
     focal_x: float = 0.5
     focal_y: float = 0.5
     radial_count: int = 16
@@ -95,7 +96,7 @@ class Settings:
     def __post_init__(self):
         if self.scope not in ("active", "all"):
             raise ValueError("Scope must be active or all")
-        for name in GUIDE_KEYS + ("fit_camera", "mirror", "pyramid_inverted",
+        for name in GUIDE_KEYS + ("fit_camera", "mirror", "flip_vertical", "pyramid_inverted",
                                   "v_inverted"):
             if type(getattr(self, name)) is not bool:
                 raise ValueError(name + " must be a boolean")

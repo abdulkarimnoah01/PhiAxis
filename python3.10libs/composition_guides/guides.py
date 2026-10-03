@@ -141,9 +141,9 @@ _BUILDERS = (
                                        (r.x + r.width, r.y, r.x, r.y + r.height)))),
     ("crosshair", lambda r, s: _lines(_crosshair(r))),
     ("safe_area", lambda r, s: _lines(_safe_area(r, s))),
-    ("golden_triangle", lambda r, s: _lines(golden_triangle(r, s.orientation, s.mirror))),
+    ("golden_triangle", lambda r, s: _lines(golden_triangle(r, s.orientation, s.mirror, s.flip_vertical))),
     ("dynamic_symmetry", lambda r, s: _lines(dynamic_symmetry(r, s.dynamic_mode))),
-    ("diagonal_phi", lambda r, s: _lines(diagonal_phi(r, s.orientation, s.mirror))),
+    ("diagonal_phi", lambda r, s: _lines(diagonal_phi(r, s.orientation, s.mirror, s.flip_vertical))),
     ("radiating", lambda r, s: _lines(radiating(r, s.focal_x, s.focal_y, s.radial_count))),
     ("tunnel", lambda r, s: _lines(tunnel(r, s.focal_x, s.focal_y, s.tunnel_scale))),
     ("center_cross", lambda r, s: _lines(center_lines(r, s.center_mode))),
@@ -154,21 +154,21 @@ _BUILDERS = (
     ("leading_lines", lambda r, s: _lines(leading_lines(r, s.focal_x, s.focal_y,
                                                         s.leading_width))),
     ("golden_spiral", lambda r, s: GuideGeometry(
-        polylines=(golden_spiral(r, s.orientation, s.mirror),))),
+        polylines=(golden_spiral(r, s.orientation, s.mirror, s.flip_vertical),))),
     ("circle", lambda r, s: GuideGeometry(ellipses=(_circle(r, s),))),
-    ("single_diagonal", lambda r, s: _lines(single_diagonal(r, s.orientation, s.mirror))),
+    ("single_diagonal", lambda r, s: _lines(single_diagonal(r, s.orientation, s.mirror, s.flip_vertical))),
     ("v_shape", lambda r, s: _lines(v_shape(r, s.v_apex_x, s.v_apex_y, s.v_width,
                                             s.v_inverted))),
-    ("l_shape", lambda r, s: _lines(l_shape(r, s.l_inset, s.orientation, s.mirror))),
+    ("l_shape", lambda r, s: _lines(l_shape(r, s.l_inset, s.orientation, s.mirror, s.flip_vertical))),
     ("s_curve", lambda r, s: GuideGeometry(
-        polylines=(s_curve(r, s.curvature, s.orientation, s.mirror),))),
+        polylines=(s_curve(r, s.curvature, s.orientation, s.mirror, s.flip_vertical),))),
     ("c_curve", lambda r, s: GuideGeometry(
-        polylines=(c_curve(r, s.curvature, s.orientation, s.mirror),))),
+        polylines=(c_curve(r, s.curvature, s.orientation, s.mirror, s.flip_vertical),))),
     ("balance", lambda r, s: balance(r, s.balance_spacing, s.balance_scale)),
     ("asymmetric_balance", lambda r, s: asymmetric_balance(
         r, (s.asym_a_x, s.asym_a_y, s.asym_a_scale),
         (s.asym_b_x, s.asym_b_y, s.asym_b_scale))),
-    ("golden_rectangles", lambda r, s: golden_rectangles(r, s.orientation, s.mirror)),
+    ("golden_rectangles", lambda r, s: golden_rectangles(r, s.orientation, s.mirror, s.flip_vertical)),
 )
 
 
@@ -194,12 +194,16 @@ def guide_lines(rect, settings):
     return guide_geometry(rect, settings).lines
 
 
-def _map(rect, point, orientation=0, mirror=False):
+def _map(rect, point, orientation=0, mirror=False, flip=False):
+    """Map a unit-square point into `rect`: quarter turns first, then the screen-space
+    flips (`mirror` left-right, `flip` up-down)."""
     x, y = point
-    if mirror:
-        x = 1 - x
     for _ in range(orientation):
         x, y = 1 - y, x
+    if mirror:
+        x = 1 - x
+    if flip:
+        y = 1 - y
     return rect.x + x * rect.width, rect.y + y * rect.height
 
 
@@ -210,8 +214,8 @@ def _projection(point, start, end):
     return start[0] + t * dx, start[1] + t * dy
 
 
-def golden_triangle(rect, orientation=0, mirror=False):
-    a, b, c, d = tuple(_map(rect, p, orientation, mirror) for p in
+def golden_triangle(rect, orientation=0, mirror=False, flip=False):
+    a, b, c, d = tuple(_map(rect, p, orientation, mirror, flip) for p in
                        ((0, 0), (1, 0), (1, 1), (0, 1)))
     return ((a[0], a[1], c[0], c[1]),
             (b[0], b[1], *_projection(b, a, c)),
@@ -259,7 +263,7 @@ def _armature(rect):
     return tuple(lines)
 
 
-def diagonal_phi(rect, orientation=0, mirror=False):
+def diagonal_phi(rect, orientation=0, mirror=False, flip=False):
     f = (3 - 5 ** 0.5) / 2
     pairs = (((0, 0), (1, 1)), ((1, 0), (0, 1)),
              ((0, 0), (1, f)), ((0, 0), (f, 1)),
@@ -268,7 +272,7 @@ def diagonal_phi(rect, orientation=0, mirror=False):
              ((0, 1), (1, 1 - f)), ((0, 1), (f, 0)))
     result = []
     for start, end in pairs:
-        a, b = _map(rect, start, orientation, mirror), _map(rect, end, orientation, mirror)
+        a, b = _map(rect, start, orientation, mirror, flip), _map(rect, end, orientation, mirror, flip)
         result.append((a[0], a[1], b[0], b[1]))
     return tuple(result)
 
@@ -419,7 +423,7 @@ def _golden_frame(rect, orientation):
     return fit_aspect(rect, PHI if orientation % 2 == 0 else 1 / PHI)
 
 
-def golden_spiral(rect, orientation=0, mirror=False, samples=181):
+def golden_spiral(rect, orientation=0, mirror=False, flip=False, samples=181):
     """Circular golden-rectangle arcs fitted without non-uniform scaling."""
     arcs = _golden_arcs()
     frame = _golden_frame(rect, orientation)
@@ -431,11 +435,11 @@ def golden_spiral(rect, orientation=0, mirror=False, samples=181):
         center, radius = arcs[arc]
         point = ((center[0] + radius * cos(angle)) / PHI,
                  center[1] + radius * sin(angle))
-        result.append(_map(frame, point, orientation, mirror))
+        result.append(_map(frame, point, orientation, mirror, flip))
     return tuple(result)
 
 
-def golden_rectangles(rect, orientation=0, mirror=False):
+def golden_rectangles(rect, orientation=0, mirror=False, flip=False):
     """The fitted golden rectangle and the cuts that divide it into nested squares.
 
     Spiral arc i is a quarter circle centered on a corner of square i; the
@@ -444,21 +448,21 @@ def golden_rectangles(rect, orientation=0, mirror=False):
     once, so dashed line styles stay dashed.
     """
     frame = _golden_frame(rect, orientation)
-    outline = tuple(_map(frame, p, orientation, mirror)
+    outline = tuple(_map(frame, p, orientation, mirror, flip)
                     for p in ((0, 0), (1, 0), (1, 1), (0, 1), (0, 0)))
     cuts = []
     for index, (center, radius) in enumerate(_golden_arcs()):
         end = pi + (index + 1) * pi / 2
         tip = (center[0] + radius * cos(end), center[1] + radius * sin(end))
-        a = _map(frame, (center[0] / PHI, center[1]), orientation, mirror)
-        b = _map(frame, (tip[0] / PHI, tip[1]), orientation, mirror)
+        a = _map(frame, (center[0] / PHI, center[1]), orientation, mirror, flip)
+        b = _map(frame, (tip[0] / PHI, tip[1]), orientation, mirror, flip)
         cuts.append((a[0], a[1], b[0], b[1]))
     return GuideGeometry(lines=tuple(cuts), polylines=(outline,))
 
 
-def single_diagonal(rect, orientation=0, mirror=False):
-    """One corner-to-corner line; orientation and mirror choose which."""
-    a, b = _map(rect, (0, 0), orientation, mirror), _map(rect, (1, 1), orientation, mirror)
+def single_diagonal(rect, orientation=0, mirror=False, flip=False):
+    """One corner-to-corner line; orientation and the flips choose which."""
+    a, b = _map(rect, (0, 0), orientation, mirror, flip), _map(rect, (1, 1), orientation, mirror, flip)
     return ((a[0], a[1], b[0], b[1]),)
 
 
@@ -472,26 +476,26 @@ def v_shape(rect, apex_x=0.5, apex_y=0.85, width=0.9, inverted=False):
     return ((left[0], left[1], apex[0], apex[1]), (right[0], right[1], apex[0], apex[1]))
 
 
-def l_shape(rect, inset=0.15, orientation=0, mirror=False):
+def l_shape(rect, inset=0.15, orientation=0, mirror=False, flip=False):
     """A vertical stroke meeting a horizontal base, inset from one corner."""
-    points = [_map(rect, p, orientation, mirror) for p in
+    points = [_map(rect, p, orientation, mirror, flip) for p in
               ((inset, inset), (inset, 1 - inset), (1 - inset, 1 - inset))]
     return ((*points[0], *points[1]), (*points[1], *points[2]))
 
 
-def s_curve(rect, amount=0.25, orientation=0, mirror=False, samples=121):
+def s_curve(rect, amount=0.25, orientation=0, mirror=False, flip=False, samples=121):
     """A sine-wave S running the frame's height, swinging `amount` each side."""
-    return tuple(_map(rect, (0.5 + amount * sin(2 * pi * t), t), orientation, mirror)
+    return tuple(_map(rect, (0.5 + amount * sin(2 * pi * t), t), orientation, mirror, flip)
                  for t in (i / (samples - 1) for i in range(samples)))
 
 
-def c_curve(rect, amount=0.25, orientation=0, mirror=False, samples=91):
+def c_curve(rect, amount=0.25, orientation=0, mirror=False, flip=False, samples=91):
     """A half-ellipse C opening to the right, `amount` deep, 80% of the height."""
     result = []
     for i in range(samples):
         theta = -pi / 2 + pi * i / (samples - 1)
         point = (0.5 + amount / 2 - amount * cos(theta), 0.5 + 0.4 * sin(theta))
-        result.append(_map(rect, point, orientation, mirror))
+        result.append(_map(rect, point, orientation, mirror, flip))
     return tuple(result)
 
 

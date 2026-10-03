@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "python3.10libs"))
 from composition_guides.guides import (
     Rect, PHI, guide_layers, guide_geometry, dynamic_symmetry, golden_rectangles,
     golden_spiral, single_diagonal, v_shape, l_shape, s_curve, c_curve, balance,
-    asymmetric_balance)
+    asymmetric_balance, golden_triangle, diagonal_phi)
 from composition_guides.settings import (
     Settings, GUIDE_KEYS, style_for, with_guide_style, load, save, load_presets,
     save_preset, delete_preset)
@@ -124,6 +124,38 @@ class ShapeTests(unittest.TestCase):
             self.assertEqual(rounded(spiral[20]), rounded(cuts[0][2:]))
             segments = {rounded(c) for c in cuts}
             self.assertEqual(len(segments), 9)                # nothing drawn twice
+
+    def test_golden_flips_move_the_spiral_to_every_corner(self):
+        rect = Rect(0, 0, 1000, 618)
+        start = golden_spiral(rect)[0]
+        left_right = golden_spiral(rect, mirror=True)[0]
+        up_down = golden_spiral(rect, flip=True)[0]
+        both = golden_spiral(rect, mirror=True, flip=True)[0]
+        corners = {rounded((p,))[0] for p in (start, left_right, up_down, both)}
+        self.assertEqual(len(corners), 4)
+        self.assertAlmostEqual(left_right[0], rect.width - start[0], places=6)
+        self.assertAlmostEqual(left_right[1], start[1], places=6)
+        self.assertAlmostEqual(up_down[0], start[0], places=6)
+        self.assertAlmostEqual(up_down[1], rect.height - start[1], places=6)
+        # Flipping twice returns to the start; the shape is only mirrored, not distorted.
+        flipped = golden_spiral(rect, flip=True)
+        for a, b in zip(golden_spiral(rect), flipped):
+            self.assertAlmostEqual(a[0], b[0], places=6)
+            self.assertAlmostEqual(a[1], rect.height - b[1], places=6)
+        for guide in (golden_rectangles, golden_triangle, diagonal_phi):
+            plain = guide(rect)
+            plain = plain.lines if hasattr(plain, "lines") else plain
+            mirrored = guide(rect, mirror=True)
+            mirrored = mirrored.lines if hasattr(mirrored, "lines") else mirrored
+            self.assertNotEqual(rounded(plain), rounded(mirrored))
+
+    def test_flips_are_screen_space_after_rotation(self):
+        rect = Rect(0, 0, 100, 100)
+        base = l_shape(rect, .1, orientation=1)
+        flipped = l_shape(rect, .1, orientation=1, mirror=True)
+        for (ax, ay, bx, by), (cx, cy, dx, dy) in zip(base, flipped):
+            self.assertAlmostEqual(cx, 100 - ax); self.assertAlmostEqual(cy, ay)
+            self.assertAlmostEqual(dx, 100 - bx); self.assertAlmostEqual(dy, by)
 
     def test_new_settings_validation(self):
         for kwargs in (dict(dynamic_mode="root9"), dict(line_style="wavy"),

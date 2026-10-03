@@ -4,6 +4,18 @@ All notable changes to PhiAxis. Newest first. Version numbers follow
 `major.minor.patch`: patch for fixes, minor for new guides or features, major for
 changes that break saved settings.
 
+### 0.7.0 (2026-10-03)
+
+- Golden ratio guides (spiral, rectangles, triangle) can be flipped **left-right** and
+  **up-down**, so the spiral can start from any of the four corners. Use the two checkboxes
+  under "Golden ratio direction" in the Guide Settings panel, or the new shelf tools
+  **Flip Golden Left-Right** and **Flip Golden Up-Down**; from Python,
+  `composition_guides.flip("horizontal")` or `flip("vertical")`. The same flips apply to
+  diagonal phi, the single diagonal, the L shape and the S / C curves.
+- Changed: flips now act on the screen, after the 90-degree rotation. With the rotation set to
+  90 or 270 degrees, "Flip left-right" now mirrors what you see left to right.
+- New setting `flip_vertical` (default off); existing settings files load unchanged.
+
 ### 0.6.1 (2026-10-03)
 
 - Fixed: opening Guide Settings raised "cannot import name 'check_for_updates'" in a Houdini

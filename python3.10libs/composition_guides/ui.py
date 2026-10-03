@@ -166,9 +166,11 @@ class SettingsDialog(QtWidgets.QDialog):
         self.v_inverted = self.check("Open downward")
         form.addRow("V shape", self.v_inverted)
         self.orientation = self.combo(("0°", 0), ("90°", 1), ("180°", 2), ("270°", 3))
-        form.addRow("Asymmetric orientation", self.orientation)
-        self.mirror = self.check("Mirror horizontally")
-        form.addRow("Asymmetric guides", self.mirror)
+        form.addRow("Rotate golden ratio / diagonal guides", self.orientation)
+        self.mirror = self.check("Flip left ↔ right")
+        form.addRow("Golden ratio direction", self.mirror)
+        self.flip_vertical = self.check("Flip up ↕ down")
+        form.addRow("", self.flip_vertical)
         self.radial_count = QtWidgets.QSpinBox()
         self.radial_count.setRange(4, 64)
         self.radial_count.setSingleStep(2)
@@ -178,7 +180,7 @@ class SettingsDialog(QtWidgets.QDialog):
             spin = self.spin(low, high, step, "%")
             setattr(self, name, spin)
             form.addRow(label, spin)
-        note = QtWidgets.QLabel("Orientation and mirror apply to the golden spiral, "
+        note = QtWidgets.QLabel("Rotation and the two flips apply to the golden spiral, "
                                 "rectangles and triangle, diagonal phi, single "
                                 "diagonal, L shape and S / C curves.")
         note.setWordWrap(True)
@@ -262,7 +264,7 @@ class SettingsDialog(QtWidgets.QDialog):
                          "vanishing_mode", "orientation", "line_style"):
                 widget = getattr(self, name)
                 widget.setCurrentIndex(widget.findData(getattr(settings, name)))
-            for name in ("pyramid_inverted", "v_inverted", "mirror"):
+            for name in ("pyramid_inverted", "v_inverted", "mirror", "flip_vertical"):
                 getattr(self, name).setChecked(getattr(settings, name))
             self.radial_count.setValue(settings.radial_count)
             for name, *_ in PERCENT_FIELDS:
@@ -293,7 +295,7 @@ class SettingsDialog(QtWidgets.QDialog):
         for name in ("scope", "thirds_mode", "center_mode", "dynamic_mode",
                      "vanishing_mode", "orientation", "line_style"):
             values[name] = getattr(self, name).currentData()
-        for name in ("pyramid_inverted", "v_inverted", "mirror"):
+        for name in ("pyramid_inverted", "v_inverted", "mirror", "flip_vertical"):
             values[name] = getattr(self, name).isChecked()
         for name, *_ in PERCENT_FIELDS:
             values[name] = getattr(self, name).value() / 100

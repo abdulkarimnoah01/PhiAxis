@@ -1,5 +1,5 @@
 """PhiAxis node-free composition guides. Importing has no UI side effects."""
-__version__ = "0.6.1"
+__version__ = "0.7.0"
 _SESSION_KEY = "_composition_guides_manager_v1"
 _SETTINGS_KEY = "_composition_guides_settings_v1"
 _UI_KEY = "_composition_guides_dialog_v1"
@@ -117,6 +117,20 @@ def set_settings(settings, persist=False):
     manager = _current()
     if manager:
         manager.set_settings(settings)
+
+
+def flip(axis):
+    """Flip the golden ratio guides ("horizontal" left-right or "vertical" up-down) and
+    return the new state. Works whether or not PhiAxis is currently drawing."""
+    from dataclasses import replace
+    field = {"horizontal": "mirror", "vertical": "flip_vertical"}.get(axis)
+    if field is None:
+        raise ValueError("axis must be 'horizontal' or 'vertical'")
+    current = get_settings()
+    new = not getattr(current, field)
+    set_settings(replace(current, **{field: new}))
+    _sync_dialog()
+    return new
 
 
 def show_settings():
