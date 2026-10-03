@@ -1,0 +1,45 @@
+name: release
+
+# Push a tag like v0.6.1 (after bumping __version__ and adding a CHANGELOG section) and this
+# tests PhiAxis, builds the release zip and version.json, and publishes them as a GitHub
+# release. Installed copies find the update there (the release bakes in the update source).
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check the tag matches the version in the code
+        shell: bash
+        run: |
+          VERSION=$(python -c "import re;print(re.search(r'__version__ = \"([^\"]+)\"', open('python3.10libs/composition_guides/__init__.py').read()).group(1))")
+          if [ "${GITHUB_REF_NAME}" != "v${VERSION}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match version ${VERSION} in the code"
+            exit 1
+          fi
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+
+      - name: Test
+        run: python -m unittest discover -s tests -p "test_*.py"
+
+      - name: Build the release
+        run: python tools/make_release.py --update-source "https://github.com/${{ github.repository }}/releases/latest/download/"
+
+      - name: Publish
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -c "import sys; sys.path.insert(0, 'tools'); import make_release as m; print('\n'.join('- ' + n for n in m.changelog_notes(m.read_version())))" > notes.md
+          gh release create "${GITHUB_REF_NAME}" "dist/PhiAxis-${VERSION}.zip" dist/version.json --title "PhiAxis ${VERSION}" --notes-file notes.md

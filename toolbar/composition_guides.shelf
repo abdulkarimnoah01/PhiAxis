@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <toolshelf name="composition_guides" label="PhiAxis">
+    <memberTool name="composition_guides_toggle"/>
+    <memberTool name="composition_guides_settings"/>
+    <memberTool name="composition_guides_update"/>
+  </toolshelf>
+  <tool name="composition_guides_toggle" label="Toggle Guides" icon="PhiAxis">
+    <helpText>Toggle PhiAxis globally.</helpText>
+    <script scriptType="python"><![CDATA[
+import composition_guides
+composition_guides.toggle(kwargs.get("pane"))
+]]></script>
+  </tool>
+  <tool name="composition_guides_settings" label="Guide Settings" icon="PhiAxis">
+    <script scriptType="python"><![CDATA[
+import composition_guides
+composition_guides.show_settings()
+]]></script>
+  </tool>
+  <tool name="composition_guides_update" label="Check for Updates" icon="PhiAxis">
+    <helpText>Check whether a newer PhiAxis is available and offer to install it.</helpText>
+    <script scriptType="python"><![CDATA[
+import composition_guides
+composition_guides.check_for_updates()
+]]></script>
+  </tool>
+</shelfDocument>
