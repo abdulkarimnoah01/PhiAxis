@@ -7,6 +7,10 @@ balance and more, drawn live over your Scene Viewer while you move the camera. F
 
 PhiAxis is an overlay: it adds no nodes, changes nothing in your scene, and never appears in a render.
 
+**Get it:** free from the [latest GitHub release](../../releases/latest), or on
+[Gumroad](https://noahkarim.gumroad.com/l/kesgnv) (pay what you want, from $0; a dollar is a nice thank-you).
+It is the same download in both places.
+
 ![PhiAxis in Houdini 22: golden spiral, golden rectangles, diagonals and thirds drawn as glowing lines in the viewport](docs/images/01_phiaxis_in_houdini.jpg)
 
 | | |
@@ -40,6 +44,44 @@ frames are [below](#license-and-credits).*
   turn it on.
 - **Never in the way.** Clicks, selection and camera moves pass straight through the overlay.
 - Works with **Houdini 20.5, 21.0 and 22.0** on Windows.
+
+## How it works
+
+**1. Overlay**
+
+- It uses SideFX's documented `hou.qt.ViewerOverlay`, a transparent window attached to the Scene Viewer.
+- Mouse input passes straight through it, so clicks and camera moves still reach Houdini.
+- It creates no nodes and never appears in a render. It uses only documented Houdini APIs.
+
+**2. Finding the frame**
+
+- `adapter.py` asks Houdini for the viewport's geometry. Houdini reports it with the origin at the bottom left and
+  Qt uses the top left, so PhiAxis converts once.
+- If a camera is active, it projects the camera's real frame into screen pixels, including the screen window,
+  orthographic cameras, non-square pixels and Solaris cameras. Without a camera it uses the whole viewport.
+- It never multiplies by the screen's DPI scale, because Qt's painter already does that. So if your screen is
+  scaled to 150% or 200%, the overlay holds stable.
+
+**3. Guide geometry**
+
+- `guides.py` is pure Python with no Houdini or Qt. It takes a rectangle and returns lines, polylines and ellipses
+  for each guide: thirds, the golden spiral built from true quarter-circle arcs, dynamic symmetry, vanishing points,
+  balance and so on.
+- Because it is pure Python, the maths is tested with plain Python, without Houdini. So it is accurate, stays out of
+  the way and is not affected by your active Houdini scene.
+
+**4. Painting**
+
+- `overlay.py` loops over the enabled guides and draws them with QPainter.
+- With glow on, it first draws a few wide, faint strokes added to the picture, then a lighter, narrower core on top.
+  `glow.py` holds that maths.
+
+**5. Settings and style**
+
+- `settings.py` holds a frozen dataclass, validated when it is created, saved as versioned JSON in your preferences
+  folder.
+- Presets choose which guides show. Style fields cover color, opacity, thickness, line style, per-guide styles, glow,
+  and the color schemes from `schemes.py`.
 
 ## Install (about a minute)
 
@@ -83,7 +125,7 @@ please run the tests first.
 
 ## License and credits
 
-PhiAxis is copyright © 2026 AbdulKarim Noah, released under the [MIT License](LICENSE). Houdini is a trademark of Side Effects Software Inc.; PhiAxis is not affiliated
+PhiAxis is copyright © 2026 AbdulKarim Noah, released under the [MIT License](LICENSE). It is also available on [Gumroad](https://noahkarim.gumroad.com/l/kesgnv). Houdini is a trademark of Side Effects Software Inc.; PhiAxis is not affiliated
 with or endorsed by SideFX.
 
 Reference frames in the screenshots belong to their owners and are shown only to illustrate how the
