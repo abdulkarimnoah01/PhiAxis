@@ -7,7 +7,7 @@ balance and more, drawn live over your Scene Viewer while you move the camera. F
 
 PhiAxis is an overlay: it adds no nodes, changes nothing in your scene, and never appears in a render.
 
-![PhiAxis drawing a golden spiral, golden rectangles and a frame over a Solaris camera in Houdini](docs/images/01_phiaxis_in_houdini.jpg)
+![PhiAxis in Houdini 22: golden spiral, golden rectangles, diagonals and thirds drawn as glowing lines in the viewport](docs/images/01_phiaxis_in_houdini.jpg)
 
 | | |
 | --- | --- |
@@ -95,4 +95,4 @@ removed on request.
 - Centered frame within a frame, central symmetry, centered composition and the combined balance shot use screenshots from *Alan Wake 2*
   (Remedy Entertainment; published by Epic Games Publishing).
 - The posed figure is SideFX's Electra test character that ships with Houdini.
-- The first screenshot shows PhiAxis over a Solaris camera view.
+- The first screenshot shows PhiAxis's glow and color scheme over the viewport grid in Houdini 22.
