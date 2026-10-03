@@ -17,8 +17,8 @@ PhiAxis is an overlay: it adds no nodes, changes nothing in your scene, and neve
 | *Central symmetry* | *Centered composition* |
 | ![Leading lines](docs/images/06_leading_lines.jpg) | ![Rule of thirds](docs/images/07_rule_of_thirds.jpg) |
 | *Leading lines* | *Rule of thirds* |
-| ![Balance, symmetry and centered composition together](docs/images/08_balance_symmetry_centered.jpg) | |
-| *Balance, symmetry and centered composition combined* | |
+| ![Balance, symmetry and centered composition together](docs/images/08_balance_symmetry_centered.jpg) | ![PhiAxis over a Solaris camera view: golden spiral, rectangles and a frame](docs/images/09_solaris_camera_view.jpg) |
+| *Balance, symmetry and centered composition combined* | *Golden spiral over a Solaris camera view* |
 
 *Screenshots of PhiAxis running in Houdini, drawing its guides over reference frames. The guides illustrate how each one
 looks over an image and do not claim the filmmakers or game artists used that construction. Credits for the reference
@@ -95,4 +95,5 @@ removed on request.
 - Centered frame within a frame, central symmetry, centered composition and the combined balance shot use screenshots from *Alan Wake 2*
   (Remedy Entertainment; published by Epic Games Publishing).
 - The posed figure is SideFX's Electra test character that ships with Houdini.
+- The Solaris camera view screenshot shows PhiAxis over a work-in-progress scene.
 - The first screenshot shows PhiAxis's glow and color scheme over the viewport grid in Houdini 22.
