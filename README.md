@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/images/PhiAxis-icon.png" alt="PhiAxis icon" width="140"></p>
+
 # PhiAxis
 
 **Composition guides for Houdini's viewport.** Thirds, phi grid, golden spiral, vanishing points,

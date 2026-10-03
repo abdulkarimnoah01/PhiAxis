@@ -4,6 +4,11 @@ All notable changes to PhiAxis. Newest first. Version numbers follow
 `major.minor.patch`: patch for fixes, minor for new guides or features, major for
 changes that break saved settings.
 
+### 0.7.2 (2026-10-03)
+
+- New PhiAxis icon on the shelf: line art drawn for the dark Houdini interface (the source
+  artwork and a vector version are in the project's `icon` folder and `docs/images`).
+
 ### 0.7.1 (2026-10-03)
 
 - Removed the two flip tools from the shelf. Flipping the golden ratio guides is a setting
