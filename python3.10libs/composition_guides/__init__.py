@@ -1,5 +1,5 @@
 """PhiAxis node-free composition guides. Importing has no UI side effects."""
-__version__ = "0.8.0"
+__version__ = "0.8.1"
 _SESSION_KEY = "_composition_guides_manager_v1"
 _SETTINGS_KEY = "_composition_guides_settings_v1"
 _UI_KEY = "_composition_guides_dialog_v1"

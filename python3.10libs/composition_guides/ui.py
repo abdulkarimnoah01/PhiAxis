@@ -206,6 +206,7 @@ class SettingsDialog(QtWidgets.QDialog):
         self.scheme.addItem(schemes.DEFAULT_SCHEME)
         for name in schemes.SCHEMES:
             self.scheme.addItem(name)
+        self.scheme.addItem(schemes.CUSTOM_SCHEME)      # shown when styles were edited by hand
         self.scheme.setToolTip(
             "Gives each family of guides its own color. Single color removes every "
             "per-guide style, including opacity and thickness.")
@@ -293,6 +294,8 @@ class SettingsDialog(QtWidgets.QDialog):
                 getattr(self, name).setValue(getattr(settings, name) * 100)
             self.opacity.setValue(settings.opacity * 100)
             self.thickness.setValue(settings.thickness)
+            self.scheme.setCurrentIndex(
+                max(self.scheme.findText(schemes.current_scheme(settings)), 0))
             self.glow.setChecked(settings.glow)
             self.glow_amount.setValue(settings.glow_amount * 100)
             self.glow_amount.setEnabled(settings.glow)
@@ -347,6 +350,9 @@ class SettingsDialog(QtWidgets.QDialog):
     # ----- actions ------------------------------------------------------
     def apply_scheme(self):
         name = self.scheme.currentText()
+        if name == schemes.CUSTOM_SCHEME:
+            self.message.setText("Custom means your own per-guide styles; pick a scheme to replace them.")
+            return
         set_settings(schemes.apply_scheme(get_settings(), name))
         self.message.setText("Applied color scheme “%s”." % name)
         self.sync()

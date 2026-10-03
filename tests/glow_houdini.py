@@ -120,6 +120,9 @@ def apply_scheme():
            colors["golden_spiral"] != colors["thirds"],
            spiral=colors["golden_spiral"], thirds=colors["thirds"])
     record("glow stayed off while applying a scheme", not settings.glow)
+    dialog.sync()
+    record("Color scheme list shows the applied scheme", dialog.scheme.currentText() == SCHEME,
+           shown=dialog.scheme.currentText())
 
 
 def measure_scheme():
@@ -135,6 +138,19 @@ def single_color():
     dialog.scheme.setCurrentIndex(0)
     dialog.apply_scheme()
     record("Single color removes per-guide styles", cg.get_settings().guide_styles == ())
+    dialog.sync()
+    record("Color scheme list shows Single color again",
+           dialog.scheme.currentText() == schemes.DEFAULT_SCHEME, shown=dialog.scheme.currentText())
+    cg.set_settings(schemes.apply_scheme(cg.get_settings(), SCHEME))
+    from composition_guides.settings import with_guide_style
+    cg.set_settings(with_guide_style(cg.get_settings(), "thirds", ((1, 2, 3), 0.5, 1.0, "solid")))
+    dialog.sync()
+    record("Color scheme list shows Custom after a hand edit",
+           dialog.scheme.currentText() == schemes.CUSTOM_SCHEME, shown=dialog.scheme.currentText())
+    dialog.apply_scheme()
+    record("Apply on Custom leaves per-guide styles alone",
+           style_for(cg.get_settings(), "thirds")[0] == (1, 2, 3))
+    cg.set_settings(schemes.apply_scheme(cg.get_settings(), schemes.DEFAULT_SCHEME))
     dialog.glow.setChecked(True)
     dialog.glow_amount.setValue(140)
 

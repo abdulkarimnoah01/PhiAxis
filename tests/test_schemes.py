@@ -121,6 +121,24 @@ class SchemeTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             schemes.apply_scheme(Settings(), "Nope")
 
+    def test_current_scheme_is_found_again(self):
+        self.assertEqual(schemes.current_scheme(Settings()), schemes.DEFAULT_SCHEME)
+        for name in schemes.SCHEMES:
+            applied = schemes.apply_scheme(Settings(), name)
+            self.assertEqual(schemes.current_scheme(applied), name)
+        first = next(iter(schemes.SCHEMES))
+        edited = schemes.apply_scheme(Settings(), first)
+        edited = replace(edited, guide_styles=tuple(
+            (k, (1, 2, 3) if k == "thirds" else c, o, t, st)
+            for k, c, o, t, st in edited.guide_styles))
+        self.assertEqual(schemes.current_scheme(edited), schemes.CUSTOM_SCHEME)
+        one = replace(Settings(), guide_styles=(("thirds", (9, 9, 9), 0.5, 1.0, "solid"),))
+        self.assertEqual(schemes.current_scheme(one), schemes.CUSTOM_SCHEME)
+        # opacity, thickness and line style per guide do not hide the scheme
+        styled = schemes.apply_scheme(replace(Settings(), opacity=0.4, thickness=3.0), first)
+        self.assertEqual(schemes.current_scheme(styled), first)
+        self.assertNotIn(schemes.CUSTOM_SCHEME, schemes.SCHEMES)
+
     def test_schemes_survive_save_and_load(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "settings.json"

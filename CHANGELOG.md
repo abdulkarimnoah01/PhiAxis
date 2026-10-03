@@ -4,6 +4,12 @@ All notable changes to PhiAxis. Newest first. Version numbers follow
 `major.minor.patch`: patch for fixes, minor for new guides or features, major for
 changes that break saved settings.
 
+### 0.8.1 (2026-10-03)
+
+- Fixed: the Style tab's **Color scheme** list now shows the scheme in use (it stayed on "Single
+  color (default)" after you applied one). It shows "Custom (your own per-guide styles)" when you
+  have edited guide styles by hand, and Apply leaves your styles alone in that case.
+
 ### 0.8.0 (2026-10-03)
 
 - **Glow.** The Style tab has a new "Glow around every line" checkbox and an "Amount of glow"

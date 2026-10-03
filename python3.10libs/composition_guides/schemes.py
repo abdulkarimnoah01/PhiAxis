@@ -41,10 +41,23 @@ SCHEMES = {
              shapes=(120, 255, 70)),
 }
 DEFAULT_SCHEME = "Single color (default)"
+CUSTOM_SCHEME = "Custom (your own per-guide styles)"
 
 
 def scheme_color(name, key):
     return SCHEMES[name][FAMILY_OF[key]]
+
+
+def current_scheme(settings):
+    """Name of the scheme whose colors every guide uses, DEFAULT_SCHEME when no guide has its
+    own style, else CUSTOM_SCHEME (a mix, or a scheme edited by hand)."""
+    if not settings.guide_styles:
+        return DEFAULT_SCHEME
+    for name in SCHEMES:
+        if all(tuple(style_for(settings, key)[0]) == tuple(scheme_color(name, key))
+               for key in GUIDE_KEYS):
+            return name
+    return CUSTOM_SCHEME
 
 
 def apply_scheme(settings, name):
