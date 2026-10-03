@@ -3,8 +3,6 @@
   <toolshelf name="composition_guides" label="PhiAxis">
     <memberTool name="composition_guides_toggle"/>
     <memberTool name="composition_guides_settings"/>
-    <memberTool name="composition_guides_flip_horizontal"/>
-    <memberTool name="composition_guides_flip_vertical"/>
     <memberTool name="composition_guides_update"/>
   </toolshelf>
   <tool name="composition_guides_toggle" label="Toggle Guides" icon="PhiAxis">
@@ -18,20 +16,6 @@ composition_guides.toggle(kwargs.get("pane"))
     <script scriptType="python"><![CDATA[
 import composition_guides
 composition_guides.show_settings()
-]]></script>
-  </tool>
-  <tool name="composition_guides_flip_horizontal" label="Flip Golden Left-Right" icon="PhiAxis">
-    <helpText>Mirror the golden ratio spiral, rectangles and triangle left to right.</helpText>
-    <script scriptType="python"><![CDATA[
-import composition_guides
-composition_guides.flip("horizontal")
-]]></script>
-  </tool>
-  <tool name="composition_guides_flip_vertical" label="Flip Golden Up-Down" icon="PhiAxis">
-    <helpText>Flip the golden ratio spiral, rectangles and triangle top to bottom.</helpText>
-    <script scriptType="python"><![CDATA[
-import composition_guides
-composition_guides.flip("vertical")
 ]]></script>
   </tool>
   <tool name="composition_guides_update" label="Check for Updates" icon="PhiAxis">

@@ -86,6 +86,7 @@ class Settings:
     curvature: float = 0.25
     balance_spacing: float = 0.5
     balance_scale: float = 0.3
+    balance_y: float = 0.5
     asym_a_x: float = 0.3
     asym_a_y: float = 0.55
     asym_a_scale: float = 0.45
@@ -127,6 +128,7 @@ class Settings:
         _check_fraction("l_inset", self.l_inset, 0, 0.45)
         _check_fraction("curvature", self.curvature, 0.05, 0.5)
         _check_fraction("balance_spacing", self.balance_spacing, 0.05, 0.95)
+        _check_fraction("balance_y", self.balance_y, 0.05, 0.95)
         _check_color(self.color)
         if not isfinite(self.opacity) or not 0 <= self.opacity <= 1:
             raise ValueError("Opacity must be between 0 and 1")

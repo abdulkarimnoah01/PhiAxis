@@ -46,6 +46,7 @@ PERCENT_FIELDS = (
     ("curvature", "S / C curvature", 5, 50, 1),
     ("balance_spacing", "Balance spacing", 5, 95, 1),
     ("balance_scale", "Balance size", 5, 100, 5),
+    ("balance_y", "Balance height", 5, 95, 1),
     ("asym_a_x", "Large region X", 0, 100, 1), ("asym_a_y", "Large region Y", 0, 100, 1),
     ("asym_a_scale", "Large region size", 5, 100, 5),
     ("asym_b_x", "Small region X", 0, 100, 1), ("asym_b_y", "Small region Y", 0, 100, 1),

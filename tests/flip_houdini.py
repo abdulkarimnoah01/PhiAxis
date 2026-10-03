@@ -5,7 +5,7 @@ Launch in its own Houdini process with isolated preferences:
 
 Draws only the golden spiral and renders the overlay offscreen (QWidget.grab). The painted
 pixels' center of mass must move to the mirrored side for each flip, through the panel's
-checkboxes and through composition_guides.flip (what the shelf tools call).
+checkboxes and through composition_guides.flip (the Python API).
 """
 from dataclasses import replace
 from pathlib import Path

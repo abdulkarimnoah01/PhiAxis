@@ -164,7 +164,8 @@ _BUILDERS = (
         polylines=(s_curve(r, s.curvature, s.orientation, s.mirror, s.flip_vertical),))),
     ("c_curve", lambda r, s: GuideGeometry(
         polylines=(c_curve(r, s.curvature, s.orientation, s.mirror, s.flip_vertical),))),
-    ("balance", lambda r, s: balance(r, s.balance_spacing, s.balance_scale)),
+    ("balance", lambda r, s: balance(r, s.balance_spacing, s.balance_scale,
+                                    s.balance_y)),
     ("asymmetric_balance", lambda r, s: asymmetric_balance(
         r, (s.asym_a_x, s.asym_a_y, s.asym_a_scale),
         (s.asym_b_x, s.asym_b_y, s.asym_b_scale))),
@@ -523,9 +524,9 @@ def _masses(rect, masses):
     return GuideGeometry(lines=lines, ellipses=tuple(ellipses))
 
 
-def balance(rect, spacing=0.5, scale=0.3):
+def balance(rect, spacing=0.5, scale=0.3, y=0.5):
     """Two equal regions mirrored about the center, balanced on a central fulcrum."""
-    return _masses(rect, ((0.5 - spacing / 2, 0.5, scale), (0.5 + spacing / 2, 0.5, scale)))
+    return _masses(rect, ((0.5 - spacing / 2, y, scale), (0.5 + spacing / 2, y, scale)))
 
 
 def asymmetric_balance(rect, a=(0.3, 0.55, 0.45), b=(0.75, 0.4, 0.2)):

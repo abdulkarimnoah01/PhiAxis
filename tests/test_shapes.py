@@ -149,6 +149,16 @@ class ShapeTests(unittest.TestCase):
             mirrored = mirrored.lines if hasattr(mirrored, "lines") else mirrored
             self.assertNotEqual(rounded(plain), rounded(mirrored))
 
+    def test_balance_height(self):
+        rect = Rect(0, 0, 2000, 1000)
+        middle = balance(rect, .5, .3)
+        high = balance(rect, .5, .3, y=.25)
+        self.assertEqual([round(e.y + e.height / 2) for e in middle.ellipses], [500, 500])
+        self.assertEqual([round(e.y + e.height / 2) for e in high.ellipses], [250, 250])
+        self.assertEqual([e.x for e in middle.ellipses], [e.x for e in high.ellipses])
+        with self.assertRaises(ValueError):
+            Settings(balance_y=1.0)
+
     def test_flips_are_screen_space_after_rotation(self):
         rect = Rect(0, 0, 100, 100)
         base = l_shape(rect, .1, orientation=1)

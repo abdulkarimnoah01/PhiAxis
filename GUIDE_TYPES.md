@@ -28,7 +28,7 @@ Canonical names, UI behavior, and implementation status for the overlay.
 | L Shape | `l_shape` | Vertical stroke meeting a horizontal base | 4 rotations, mirror, corner inset |
 | S Curve | `s_curve` | One sine period across the frame | 4 rotations, mirror, curvature |
 | C Curve | `c_curve` | Half-ellipse opening to one side | 4 rotations, mirror, curvature |
-| Balance | `balance` | Two equal circles on a beam, fulcrum at the center | Spacing, size |
+| Balance | `balance` | Two equal circles on a beam, fulcrum at the center | Spacing, size, height |
 | Asymmetric Balance | `asymmetric_balance` | Two independent circles; fulcrum at their area-weighted center | Position and size of each region |
 
 All types can be combined, fitted to the camera frame, and drawn in the active

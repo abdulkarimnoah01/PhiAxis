@@ -4,6 +4,14 @@ All notable changes to PhiAxis. Newest first. Version numbers follow
 `major.minor.patch`: patch for fixes, minor for new guides or features, major for
 changes that break saved settings.
 
+### 0.7.1 (2026-10-03)
+
+- Removed the two flip tools from the shelf. Flipping the golden ratio guides is a setting
+  only: "Flip left-right" and "Flip up-down" under "Golden ratio direction" in the panel's
+  Adjust tab.
+- New setting "Balance height" (Adjust tab) places the two Balance circles higher or lower;
+  they used to sit on the horizontal center line only.
+
 ### 0.7.0 (2026-10-03)
 
 - Golden ratio guides (spiral, rectangles, triangle) can be flipped **left-right** and
