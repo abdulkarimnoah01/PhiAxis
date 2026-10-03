@@ -5,13 +5,22 @@ balance and more, drawn live over your Scene Viewer while you move the camera. F
 
 PhiAxis is an overlay: it adds no nodes, changes nothing in your scene, and never appears in a render.
 
+![PhiAxis drawing a golden spiral, golden rectangles and a frame over a Solaris camera in Houdini](docs/images/01_phiaxis_in_houdini.jpg)
+
 | | |
 | --- | --- |
-| ![Rule of thirds](docs/images/rule_of_thirds.jpg) | ![Asymmetric balance](docs/images/asymmetric_balance.jpg) |
-| ![Golden spiral](docs/images/golden_spiral.jpg) | ![Vanishing point](docs/images/vanishing_point.jpg) |
+| ![The Electra rig posed over a film still, with the rule of thirds](docs/images/02_rig_on_film_still.jpg) | ![Centered frame within a frame](docs/images/03_centered_frame_within_a_frame.jpg) |
+| *A posed rig over a film still, rule of thirds* | *Centered frame within a frame* |
+| ![Central symmetry](docs/images/04_central_symmetry.jpg) | ![Centered composition](docs/images/05_centered_phone_booth.jpg) |
+| *Central symmetry* | *Centered composition* |
+| ![Leading lines](docs/images/06_leading_lines.jpg) | ![Rule of thirds](docs/images/07_rule_of_thirds.jpg) |
+| *Leading lines* | *Rule of thirds* |
+| ![Balance, symmetry and centered composition together](docs/images/08_balance_symmetry_centered.jpg) | |
+| *Balance, symmetry and centered composition combined* | |
 
-*Guides drawn by PhiAxis over public-domain paintings. Rule of thirds, golden spiral, vanishing point and asymmetric balance are shown;
-the guides illustrate how each one looks over art and do not claim the painter used that construction.*
+*Screenshots of PhiAxis running in Houdini, drawing its guides over reference frames. The guides illustrate how each one
+looks over an image and do not claim the filmmakers or game artists used that construction. Credits for the reference
+frames are [below](#license-and-credits).*
 
 ## What you get
 
@@ -71,8 +80,13 @@ please run the tests first.
 PhiAxis is released under the [MIT License](LICENSE). Houdini is a trademark of Side Effects Software Inc.; PhiAxis is not affiliated
 with or endorsed by SideFX.
 
-Preview paintings, all CC0 from the Cleveland Museum of Art Open Access collection:
-- Rule of thirds: *Twilight in the Wilderness*, Frederic Edwin Church (American, 1826–1900) (Cleveland Museum of Art, CC0)
-- Golden spiral: *Vase of Flowers*, Odilon Redon (French, 1840–1916) (Cleveland Museum of Art, CC0)
-- Vanishing point: *Down to the Harbor*, George G. Adomeit (American, born Kingdom of Prussia [now Lithuania], 1879–1967) (Cleveland Museum of Art, CC0)
-- Asymmetric balance: *Castle on a River*, Salomon van Ruysdael (Dutch, 1602–1670) (Cleveland Museum of Art, CC0)
+Reference frames in the screenshots belong to their owners and are shown only to illustrate how the
+guides look over real compositions. They are not part of PhiAxis and are not covered by its license; they will be
+removed on request.
+
+- Rule of thirds, leading lines and the rig-over-film-still screenshot use stills from *Blade Runner* (1982, directed by
+  Ridley Scott; The Ladd Company / Warner Bros.).
+- Centered frame within a frame, central symmetry, centered composition and the combined balance shot use screenshots from *Alan Wake 2*
+  (Remedy Entertainment; published by Epic Games Publishing).
+- The posed figure is SideFX's Electra test character that ships with Houdini.
+- The first screenshot shows PhiAxis over a Solaris camera view.
