@@ -2,7 +2,7 @@
 
 # PhiAxis
 
-**Composition guides for Houdini's viewport.** Thirds, phi grid, golden spiral, vanishing points,
+**compositional guides for Houdini's viewport.** Thirds, phi grid, golden spiral, vanishing points,
 balance and more, drawn live over your Scene Viewer while you move the camera. Free to use (MIT).
 
 PhiAxis is an overlay: it adds no nodes, changes nothing in your scene, and never appears in a render.
