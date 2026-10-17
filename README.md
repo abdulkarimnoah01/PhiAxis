@@ -92,6 +92,10 @@ frames are [below](#license-and-credits).*
 It sets PhiAxis up for every Houdini 20.5 to 22 you have used, needs no administrator rights and copies
 nothing into Houdini itself. Details, options and uninstalling: [INSTALL.md](INSTALL.md).
 
+**Prefer to install it yourself?** PhiAxis is a standard Houdini package: copy the `payload` folder somewhere permanent
+and add one `phiaxis.json` to your packages folder. The exact steps are in
+[INSTALL.md, Manual install](INSTALL.md#manual-install-no-installer).
+
 ## Update
 
 Click **Check for Updates** on the PhiAxis shelf (or in the Guide Settings panel). It shows what is new and installs

@@ -15,6 +15,38 @@ Houdini once so it creates its preferences folder, then run it again.
 
 The shelf has three tools: **Toggle Guides**, **Guide Settings** and **Check for Updates**.
 
+## Manual install (no installer)
+
+PhiAxis is a normal Houdini **package**: a folder of Python code and shelf tools plus one small
+`.json` file that tells Houdini where it is. The installer just does these steps for you. Do them by
+hand when you manage packages yourself, for example a studio that keeps tools on a shared drive or
+launches Houdini with its own preferences or `HOUDINI_PACKAGE_DIR`.
+
+1. Unzip the download and copy the **`payload`** folder to a permanent place, for example
+   `D:/Tools/PhiAxis/0.8.1`. It contains `python3.10libs`, `toolbar` and `config`.
+2. Create a file named `phiaxis.json` in a folder Houdini reads packages from: your
+   `Documents/houdini22.0/packages` (use `houdini21.0` or `houdini20.5` for those versions), or your
+   studio's package folder. Put this in it, with the path from step 1 (forward slashes):
+
+   ```json
+   {
+       "enable": "houdini_version >= '20.5' and houdini_version < '23.0'",
+       "env": [
+           {"PHIAXIS": "D:/Tools/PhiAxis/0.8.1"},
+           {"PYTHONPATH": {"value": "$PHIAXIS/python3.10libs", "method": "prepend"}}
+       ],
+       "path": "$PHIAXIS"
+   }
+   ```
+
+3. Restart Houdini, then add the shelf: shelf **+** menu, **Shelves**, **PhiAxis**.
+
+To remove it, delete `phiaxis.json` (and the folder). To update, copy the new `payload` over a new
+folder and change the path in `phiaxis.json`.
+
+Notes: **Check for Updates** only works for a copy made by the installer, so a manual install is updated
+by hand. Your settings and presets are still saved in your Houdini preferences folder as usual.
+
 ## Artists: update
 
 Either:
